@@ -1,7 +1,6 @@
 package com.springboot.schoolAPI.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,14 +12,18 @@ import java.util.Set;
 @NoArgsConstructor
 @Setter
 @Getter
-public class Subject {
+public class SubjectEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    @Column(name = "ID")
+    private Long id;
 
-    private String subjectName;
+    @Column(name = "SUBJECT_CODE")
+    private String subjectCode;
 
+    @Column(name = "DETAIL")
+    private String detail;
 
     @ManyToMany
     @JoinTable(
@@ -28,19 +31,19 @@ public class Subject {
             joinColumns = @JoinColumn(name = "subject_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private Set<Student> enrolledStudents = new HashSet<>();
+    private Set<StudentEntity> enrolledStudents = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
-    private Teacher teacher;
+    private TeacherEntity teacher;
 
-    public void enrollStudent(Student student) {
+    public void enrollStudent(StudentEntity student) {
 
         enrolledStudents.add(student);
 
     }
 
-    public void assignTeacher(Teacher teacher) {
+    public void assignTeacher(TeacherEntity teacher) {
 
         this.teacher = teacher;
 

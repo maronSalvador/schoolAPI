@@ -1,11 +1,12 @@
 package com.springboot.schoolAPI.service;
 
-import com.springboot.schoolAPI.entity.Student;
+import com.springboot.schoolAPI.dto.Student;
+import com.springboot.schoolAPI.entity.StudentEntity;
 import com.springboot.schoolAPI.exceptions.ResourceNotFoundException;
+import com.springboot.schoolAPI.mapper.StudentMapper;
 import com.springboot.schoolAPI.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -15,35 +16,33 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    public List<Student> getAllStudent() {
+    public List<StudentEntity> getAllStudent() {
 
         return studentRepository.findAll();
 
     }
 
-    public Student getStudentById(Long id) {
+    public StudentEntity getStudentById(Long id) {
 
         return studentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student not found"));
 
     }
 
-    public Student createStudent(Student student) {
+    public StudentEntity createStudent(StudentEntity student) {
 
         return studentRepository.save(student);
 
     }
 
-    public Student updateStudent(Student student, Long id) {
-        Student existingStudent = getStudentById(id);
-        existingStudent.setFirstName(student.getFirstName());
-        existingStudent.setLastName(student.getLastName());
-        return studentRepository.save(existingStudent);
-
+    public StudentEntity updateStudent(Student student, Long id) {
+        StudentEntity existingStudent = getStudentById(id);
+        StudentEntity updatedEntity = StudentMapper.INSTANCE.update(student,  existingStudent);
+        return studentRepository.save(updatedEntity);
     }
 
     public void deleteStudent(Long id) {
 
-        Student existingStudent = getStudentById(id);
+        StudentEntity existingStudent = getStudentById(id);
         studentRepository.delete(existingStudent);
 
     }

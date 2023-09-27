@@ -1,6 +1,7 @@
 package com.springboot.schoolAPI.controller;
 
-import com.springboot.schoolAPI.entity.Student;
+import com.springboot.schoolAPI.dto.Student;
+import com.springboot.schoolAPI.entity.StudentEntity;
 import com.springboot.schoolAPI.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,28 +17,28 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping
-    public ResponseEntity<List<Student>> getAllStudents() {
+    public ResponseEntity<List<StudentEntity>> getAllStudents() {
 
         return ResponseEntity.ok(studentService.getAllStudent());
 
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+    public ResponseEntity<StudentEntity> getStudentById(@PathVariable Long id) {
 
         return ResponseEntity.ok(studentService.getStudentById(id));
 
     }
 
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+    public ResponseEntity<StudentEntity> createStudent(@RequestBody StudentEntity student) {
 
         return  ResponseEntity.ok(studentService.createStudent(student));
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@RequestBody Student student, @PathVariable Long id) {
+    public ResponseEntity<StudentEntity> updateStudent(@RequestBody Student student, @PathVariable Long id) {
 
         return ResponseEntity.ok(studentService.updateStudent(student, id));
 

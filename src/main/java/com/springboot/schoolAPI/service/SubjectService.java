@@ -1,9 +1,11 @@
 package com.springboot.schoolAPI.service;
 
-import com.springboot.schoolAPI.entity.Student;
-import com.springboot.schoolAPI.entity.Subject;
-import com.springboot.schoolAPI.entity.Teacher;
+import com.springboot.schoolAPI.dto.Subject;
+import com.springboot.schoolAPI.entity.StudentEntity;
+import com.springboot.schoolAPI.entity.SubjectEntity;
+import com.springboot.schoolAPI.entity.TeacherEntity;
 import com.springboot.schoolAPI.exceptions.ResourceNotFoundException;
+import com.springboot.schoolAPI.mapper.SubjectMapper;
 import com.springboot.schoolAPI.repository.StudentRepository;
 import com.springboot.schoolAPI.repository.SubjectRepository;
 import com.springboot.schoolAPI.repository.TeacherRepository;
@@ -22,44 +24,47 @@ public class SubjectService {
 
     private final TeacherRepository teacherRepository;
 
-    public List<Subject> getAllSubject() {
+    public List<SubjectEntity> getAllSubject() {
 
         return subjectRepository.findAll();
 
     }
 
-    public Subject getSubjectById(Long id) {
+    public SubjectEntity getSubjectById(Long id) {
 
         return subjectRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Subject not found"));
 
     }
 
-    public Subject createSSubject(Subject subject) {
+    public SubjectEntity createSubject(SubjectEntity subject) {
 
         return subjectRepository.save(subject);
 
     }
 
-    public Subject updateSubject(Subject subject, Long id) {
-        Subject existingSubject = getSubjectById(id);
-        existingSubject.setSubjectName(subject.getSubjectName());
-        return subjectRepository.save(existingSubject);
+    public SubjectEntity updateSubject(Subject subject, Long id) {
+        SubjectEntity existingSubject = getSubjectById(id);
+//        existingSubject.setSubjectCode(subject.getSubjectCode());
+//        existingSubject.setDetail(subject.getDetail());
+//        return subjectRepository.save(existingSubject);
+        SubjectEntity updatedEntity = SubjectMapper.INSTANCE.update(subject, existingSubject);
+        return subjectRepository.save(updatedEntity);
 
     }
 
-    public Subject addStudentToSubject(Long subjectId, Long studentId) {
+    public SubjectEntity addStudentToSubject(Long subjectId, Long studentId) {
 
-        Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ResourceNotFoundException("Subject not found"));
-        Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Student not found"));
+        SubjectEntity subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ResourceNotFoundException("Subject not found"));
+        StudentEntity student = studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Student not found"));
         subject.enrollStudent(student);
         return subjectRepository.save(subject);
 
     }
 
-    public Subject addTeacherToSubject(Long subjectId, Long teacherId) {
+    public SubjectEntity addTeacherToSubject(Long subjectId, Long teacherId) {
 
-        Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ResourceNotFoundException("Subject not found"));
-        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new ResourceNotFoundException("Student not found"));
+        SubjectEntity subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ResourceNotFoundException("Subject not found"));
+        TeacherEntity teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new ResourceNotFoundException("Student not found"));
         subject.assignTeacher(teacher);
         return subjectRepository.save(subject);
 
@@ -67,7 +72,7 @@ public class SubjectService {
 
     public void deleteSubject(Long id) {
 
-        Subject existingSubject = getSubjectById(id);
+        SubjectEntity existingSubject = getSubjectById(id);
         subjectRepository.delete(existingSubject);
 
     }
