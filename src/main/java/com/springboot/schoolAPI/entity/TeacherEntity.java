@@ -1,6 +1,9 @@
 package com.springboot.schoolAPI.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,16 +13,20 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "TEACHER")
 @NoArgsConstructor
 @Setter
 @Getter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class TeacherEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
+
+    @Column(name = "TEACHER_NUMBER")
+    private String teacherNumber;
 
     @Column(name = "FIRST_NAME")
     private String firstName;
@@ -42,8 +49,7 @@ public class TeacherEntity {
     @Column(name = "EMAIL")
     private String email;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "teacher")
+    @ManyToMany(mappedBy = "teacherMapping")
     private Set<SubjectEntity> subjects = new HashSet<>();
 
 }

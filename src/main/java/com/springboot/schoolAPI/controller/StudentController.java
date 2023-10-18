@@ -18,37 +18,32 @@ public class StudentController {
 
     @GetMapping
     public ResponseEntity<List<StudentEntity>> getAllStudents() {
-
         return ResponseEntity.ok(studentService.getAllStudent());
-
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<StudentEntity> getStudentById(@PathVariable Long id) {
-
         return ResponseEntity.ok(studentService.getStudentById(id));
+    }
 
+    @GetMapping("/student-number/{studentNumber}")
+    public ResponseEntity<StudentEntity> getStudentByStudentNumber(@PathVariable String studentNumber) {
+        return ResponseEntity.ok(studentService.getStudentByStudentNumber(studentNumber));
     }
 
     @PostMapping
     public ResponseEntity<StudentEntity> createStudent(@RequestBody StudentEntity student) {
-
-        return  ResponseEntity.ok(studentService.createStudent(student));
-
+        return ResponseEntity.ok(studentService.createStudent(student));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<StudentEntity> updateStudent(@RequestBody Student student, @PathVariable Long id) {
-
         return ResponseEntity.ok(studentService.updateStudent(student, id));
-
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
-
         studentService.deleteStudent(id);
         return ResponseEntity.ok("Successfully deleted");
-
     }
 }

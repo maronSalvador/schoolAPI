@@ -1,5 +1,8 @@
 package com.springboot.schoolAPI.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,10 +11,11 @@ import lombok.Setter;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "SUBJECT")
 @NoArgsConstructor
 @Setter
 @Getter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class SubjectEntity {
 
     @Id
@@ -25,27 +29,32 @@ public class SubjectEntity {
     @Column(name = "DETAIL")
     private String detail;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name = "student_enrolled",
-            joinColumns = @JoinColumn(name = "subject_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
+            name = "SUBJECT_STUDENT_MAPPING",
+            joinColumns = @JoinColumn(name = "SUBJECT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "STUDENT_ID")
     )
-    private Set<StudentEntity> enrolledStudents = new HashSet<>();
+    private Set<StudentEntity> StudentMapping = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
-    private TeacherEntity teacher;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+//    private TeacherEntity teacher;
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "SUBJECT_TEACHER_MAPPING",
+            joinColumns = @JoinColumn(name = "SUBJECT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "TEACHER_ID")
+    )
+    private Set<TeacherEntity> teacherMapping = new HashSet<>();
 
     public void enrollStudent(StudentEntity student) {
-
-        enrolledStudents.add(student);
-
+        StudentMapping.add(student);
     }
 
     public void assignTeacher(TeacherEntity teacher) {
-
-        this.teacher = teacher;
-
+        teacherMapping.add(teacher);
     }
 }

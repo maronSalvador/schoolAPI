@@ -45,14 +45,14 @@ public class SubjectController {
 
     }
 
-    @PutMapping("/{subjectId}/students/{studentId}")
+    @PostMapping("/{subjectId}/students/{studentId}")
     public ResponseEntity<SubjectEntity> addStudentToSubject(@PathVariable Long subjectId, @PathVariable Long studentId) {
 
         return ResponseEntity.ok(subjectService.addStudentToSubject(subjectId, studentId));
 
     }
 
-    @PutMapping("/{subjectId}/teachers/{teacherId}")
+    @PostMapping("/{subjectId}/teachers/{teacherId}")
     public ResponseEntity<SubjectEntity> addTeacherToSubject(@PathVariable Long subjectId, @PathVariable Long teacherId) {
 
         return ResponseEntity.ok(subjectService.addTeacherToSubject(subjectId, teacherId));
